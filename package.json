@@ -7,7 +7,8 @@
     "hooks": [
       "joshfire.connect.init", 
       "joshfire.connect.logout",
-      "joshfire.connect.friends_request"
+      "joshfire.connect.friends_request",
+      "joshfire.connect.publish"
     ],
     "options": {
       "schema": {
