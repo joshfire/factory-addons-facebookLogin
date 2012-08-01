@@ -1,0 +1,30 @@
+{
+  "name": "facebook-login",
+  "fullName": "Facebook Login",
+  "version": "0.0.1",
+  "description": "Adds facebook logins capabilities to an app",
+  "joshfire": {
+    "hooks": [
+      "like"
+    ],
+    "options": {
+      "schema": {
+        "fbAppId": {
+          "type": "string",
+          "title": "Facebook App ID",
+          "description": "see fb app admin panel (like : 399709576743670)",
+          "required": true
+        },
+        "fbChannelUrl": {
+          "type": "string",
+          "title": "Channel File URL",
+          "description": "The channel file addresses some issues with cross domain communication in certain browsers"
+        }
+      },
+      "form": [
+        "fbAppId",
+        "fbChannelUrl"
+      ]
+    }
+  }
+}
