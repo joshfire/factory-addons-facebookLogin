@@ -5,7 +5,8 @@
   "description": "Adds facebook logins capabilities to an app",
   "joshfire": {
     "hooks": [
-      "like"
+      "like", 
+      "share" 
     ],
     "options": {
       "schema": {
