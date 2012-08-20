@@ -1,7 +1,7 @@
 {
   "name": "facebook-login",
   "fullName": "Facebook Login",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Adds facebook logins capabilities to an app",
   "joshfire": {
     "hooks": [
