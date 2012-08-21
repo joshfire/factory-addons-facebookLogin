@@ -12,8 +12,6 @@ define([], function () {
     return {
       startActivity: function (intent, successCallback, failureCallback) {
 
-        alert("in plugin startActivity");
-
         /* fetches connected user infos from FB 
          * intent callback is called with current user 
          * fb data (augmented with picture)
