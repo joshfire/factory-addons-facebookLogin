@@ -49,6 +49,30 @@ define([], function () {
           FB.Event.subscribe('auth.logout', function (response) {
             if (intent.data.onLogout) intent.data.onLogout();
           });
+
+          /* on page load, check login status and call intent event callback 
+           * the callback function is called with fetched status and current 
+           * user data if connected
+           * it seems to be needed only for desktop
+           */
+          FB.getLoginStatus(function (response) {
+            // var uid = response.authResponse.userID;
+            // var accessToken = response.authResponse.accessToken;
+            if (intent.data.onInitialStatusCheck) {
+              if (response.status == "connected") {
+                fetchCurrentUser(function (err, user) {
+                  if (!err) {
+                    intent.data.onInitialStatusCheck(response.status, user);
+                  } else {
+                    console.log("error on fetchCurrentUser");
+                  }
+                });
+              } else {
+                intent.data.onInitialStatusCheck(response.status, {});
+              }
+            }
+          }, true);
+
         };
 
         if (!intent.data.device || intent.data.device == "desktop") {
@@ -56,7 +80,6 @@ define([], function () {
           /* This function is a callback to the FB SDK loading 
            */
           window.fbAsyncInit = function() {
-
             /* init the widget with app specific parameters
              */
             FB.init({
@@ -66,32 +89,7 @@ define([], function () {
               cookie     : true, // enable cookies to allow the server to access the session
               xfbml      : true // parse XFBML
             });
-
             subscribeToFBEvents();
-
-            /* on page load, check login status and call intent event callback 
-             * the callback function is called with fetched status and current 
-             * user data if connected
-             * it seems to be needed only for desktop
-             */
-            FB.getLoginStatus(function (response) {
-              // var uid = response.authResponse.userID;
-              // var accessToken = response.authResponse.accessToken;
-              if (intent.data.onInitialStatusCheck) {
-                if (response.status == "connected") {
-                  fetchCurrentUser(function (err, user) {
-                    if (!err) {
-                      intent.data.onInitialStatusCheck(response.status, user);
-                    } else {
-                      console.log("error on fetchCurrentUser");
-                    }
-                  });
-                } else {
-                  intent.data.onInitialStatusCheck(response.status, {});
-                }
-              }
-            });
-
           };
 
           // Loads the FB SDK Asynchronously
@@ -102,8 +100,9 @@ define([], function () {
              js.src = "//connect.facebook.net/en_US/all.js";
              ref.parentNode.insertBefore(js, ref);
            }(document));
+          
         }
-        else if (intent.data.device == "smartphone") {
+        else if (intent.data.device == "smartphone" || intent.data.device == "tablet") {
 
           if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) alert('Cordova variable does not exist. Check that you have included cordova.js correctly');
           if (typeof CDV == 'undefined') alert('CDV variable does not exist. Check that you have included pg-plugin-fb-connect.js correctly');
@@ -111,7 +110,6 @@ define([], function () {
           
           document.addEventListener('deviceready', function() {
             try {
-              console.log('smartphone fb init');
               FB.init({
                 appId: config.options.fbAppId, // App ID
                 channelUrl: (config.options.fbChannelUrl ? config.options.fbChannelUrl : ''), // Channel File
@@ -121,9 +119,7 @@ define([], function () {
                 useCachedDialogs: false,
                 xfbml: true // parse XFBML
               });
-
               subscribeToFBEvents();
-
             } catch (e) {
               alert(e);
             }
@@ -131,7 +127,6 @@ define([], function () {
         }
       
         return successCallback(intent.data);
-
       }
     };
   };
