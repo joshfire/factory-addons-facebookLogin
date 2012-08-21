@@ -77,15 +77,12 @@ define([], function () {
 
         if (!intent.data.device || intent.data.device == "desktop") {
 
-          /* This function is a callback to the FB SDK loading 
-           */
+          // On classic desktop load, sdk loads callback on window.fbAsyncInit : 
           window.fbAsyncInit = function() {
-            /* init the widget with app specific parameters
-             */
             FB.init({
               appId      : config.options.fbAppId, // App ID
               channelUrl : (config.options.fbChannelUrl ? config.options.fbChannelUrl : ''), // Channel File
-              status     : true, // check login status<
+              status     : true, // check login status
               cookie     : true, // enable cookies to allow the server to access the session
               xfbml      : true // parse XFBML
             });
@@ -100,21 +97,18 @@ define([], function () {
              js.src = "//connect.facebook.net/en_US/all.js";
              ref.parentNode.insertBefore(js, ref);
            }(document));
-          
+
         }
         else if (intent.data.device == "smartphone" || intent.data.device == "tablet") {
 
-          if ((typeof cordova == 'undefined') && (typeof Cordova == 'undefined')) alert('Cordova variable does not exist. Check that you have included cordova.js correctly');
-          if (typeof CDV == 'undefined') alert('CDV variable does not exist. Check that you have included pg-plugin-fb-connect.js correctly');
-          if (typeof FB == 'undefined') alert('FB variable does not exist. Check that you have included the Facebook JS SDK file.');
-          
+          // on cordova apps though, it's the deviceready callback that will give us a full fb sdk loaded
           document.addEventListener('deviceready', function() {
             try {
               FB.init({
                 appId: config.options.fbAppId, // App ID
                 channelUrl: (config.options.fbChannelUrl ? config.options.fbChannelUrl : ''), // Channel File
                 nativeInterface: CDV.FB,
-                status     : true, // check login status<
+                status     : true, // check login status
                 cookie     : true, // enable cookies to allow the server to access the session
                 useCachedDialogs: false,
                 xfbml: true // parse XFBML
@@ -124,6 +118,7 @@ define([], function () {
               alert(e);
             }
           }, false);
+
         }
       
         return successCallback(intent.data);
