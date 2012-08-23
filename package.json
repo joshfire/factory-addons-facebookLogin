@@ -8,7 +8,7 @@
       "joshfire.connect.init", 
       "joshfire.connect.logout",
       "joshfire.connect.login",
-      "joshfire.connect.friends_request",
+      "joshfire.connect.friendsrequest",
       "joshfire.connect.publish"
     ],
     "options": {
